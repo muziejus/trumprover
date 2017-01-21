@@ -3,6 +3,7 @@
 require "sinatra/base"
 require "sinatra/flash"
 require "dotenv"
+require "selenium-webdriver"
 
 Dotenv.load
 
@@ -22,8 +23,19 @@ class App < Sinatra::Base
   end
 
   post "/" do
-    # puts "puts"
-    # puts params[:inputUrl]
+    tweet_url = params[:input_url]
+    unless tweet_url =~ /^https:\/\// # maybe confused by the "https://" in the hint.
+      tweet_url = "https://" + tweet_url
+    end
+    d = Selenium::WebDriver.for :firefox
+    d.navigate.to tweet_url
+    if d.find_element(class: "permalink-tweet") && d.find_element(class: "permalink-tweet").attribute("data-screen-name") =~ /^(potus|realdonaldtrump)$/i 
+      tweet_text = d.find_element(class: "TweetTextSize--26px").text
+      puts tweet_text
+    else
+      puts "doesn't look like a trump tweet after all."
+    end
+    d.quit
     erb :results, {layout: :naked}
   end
 
