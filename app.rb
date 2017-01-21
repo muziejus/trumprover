@@ -22,12 +22,16 @@ class App < Sinatra::Base
     unless tweet_url =~ /^https:\/\// # maybe confused by the "https://" in the hint.
       tweet_url = "https://" + tweet_url
     end
-    tweet = Nokogiri::HTML(open(tweet_url)).css('div.permalink-tweet')
-    if tweet.attribute('data-screen-name').text =~ /^(potus|realdonaldtrump)$/i
-      tweet_text = tweet.css('p.TweetTextSize--26px').text
-      erb :results, locals: { tweet_text: tweet_text }, layout: :naked
-    else
-      erb :not_trump_tweet, { layout: :naked }
+    begin
+      tweet = Nokogiri::HTML(open(tweet_url)).css('div.permalink-tweet')
+      if tweet.attribute('data-screen-name').text =~ /^(potus|realdonaldtrump)$/i
+        tweet_text = tweet.css('p.TweetTextSize--26px').text
+        erb :results, locals: { tweet_text: tweet_text }, layout: :naked
+      else
+        erb :not_trump_tweet, { layout: :naked }
+      end
+    rescue
+        erb :not_trump_tweet, { layout: :naked }
     end
     
 
