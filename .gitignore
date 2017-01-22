@@ -2,4 +2,5 @@
 .env
 public/images
 imgur-upload.rb
+imgur_config.yml
 
