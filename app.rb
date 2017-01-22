@@ -26,24 +26,26 @@ class App < Sinatra::Base
       tweet = Nokogiri::HTML(open(tweet_url)).css('div.permalink-tweet')
       if tweet.attribute('data-screen-name').text =~ /^(potus|realdonaldtrump)$/i
         tweet_text = tweet.css('p.TweetTextSize--26px').text
-        erb :results, locals: { tweet_text: tweet_text }, layout: :naked
+        puts tweet_text
+        tweet_text = tweet_text[0..140]
+        erb :results, locals: { tweet_url: tweet_url, tweet_text: tweet_text }, layout: :naked
       else
         erb :not_trump_tweet, { layout: :naked }
       end
     rescue
         erb :not_trump_tweet, { layout: :naked }
     end
-    
+  end
 
-    # d = Selenium::WebDriver.for :firefox
-    # d.navigate.to tweet_url
-    # if d.find_element(class: "permalink-tweet") && d.find_element(class: "permalink-tweet").attribute("data-screen-name") =~ /^(potus|realdonaldtrump)$/i 
-    #   tweet_text = d.find_element(class: "TweetTextSize--26px").text
-    #   puts tweet_text
-    # else
-    #   puts "doesn't look like a trump tweet after all."
-    # end
-    # d.quit
+  post "/change-tweet" do
+    new_tweet_text = params[:tweet_textarea][0..140].gsub(/^"/, "“").gsub(/ "/, " “").gsub(/"/, "”").gsub(/'/, "’")
+    new_image = "images/new_tweet_#{Time.now.to_i.to_s}.png" 
+    d = Selenium::WebDriver.for :firefox
+    d.navigate.to params[:tweet_url]
+    d.execute_script("document.getElementsByClassName('TweetTextSize--26px')[0].innerHTML='#{new_tweet_text}';")
+    d.save_screenshot("public/#{new_image}")
+    d.quit
+    erb :changed_tweet, locals: { tweet_url: params[:tweet_url], image_url: new_image, tweet_text: new_tweet_text }
   end
 
 end

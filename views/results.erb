@@ -1,4 +1,9 @@
-<h1>Current Tweet Text</h1>
-<textarea class="form-control" rows="3" name="tweet_textarea" id="tweetTextarea">
-  <%= tweet_text %>
-</textarea>
+<h2>The Tweet Text:</h2>
+<form action="/change-tweet" method="POST">
+  <div class="form-group form-group-lg">
+    <textarea maxlength="140" class="form-control" name="tweet_textarea" id="tweetTextarea"><%= tweet_text %></textarea>
+  </div>
+  <input name="tweet_url" type="hidden" value="<%= tweet_url %>">
+  <button type="submit" class="btn btn-primary btn-lg">Change the Tweet!</button>
+</form>
+
