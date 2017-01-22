@@ -7,6 +7,7 @@ require "dotenv"
 require "selenium-webdriver"
 require "RMagick"
 require "./imgur"
+require "./models"
 
 Dotenv.load
 
@@ -56,6 +57,15 @@ class App < Sinatra::Base
     unless imgur_url
       refresh_token
       imgur_url = upload_image(new_image)
+    end
+    entry = Twimage.new
+    entry.attributes = { text: new_tweet_text, original_tweet: params[:tweet_url], imgur_url: imgur_url, created_at: Time.now }
+    begin
+      entry.save
+    rescue DataMapper::SaveFailureError => e
+      erb :error, locals: { e: e, validation: entry.errors.values.join(', ') }
+    rescue StandardError => e
+      erb :error, locals: { e: e }
     end
     erb :changed_tweet, locals: { imgur_url: imgur_url, tweet_url: params[:tweet_url], image_url: new_image, tweet_text: new_tweet_text }
   end
