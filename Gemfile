@@ -15,4 +15,4 @@ gem 'puma'
 
 gem 'data_mapper'
 gem 'dm-sqlite-adapter', :group => :development
-gem 'dm-postgres-adapter', :group => :production
+gem 'dm-mysql-adapter', :group => :production
