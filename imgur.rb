@@ -10,7 +10,7 @@ def upload_image(t)
   response = HTTParty.post 'https://api.imgur.com/3/upload',
     :headers => { 'Authorization' => "Bearer #{@configs[:imgur_access_token]}" },
     :body => { 'image' => Base64.encode64(File.read("public/#{t}")) }
-  puts response
+  # puts response
   response['data']['link']
 end
 

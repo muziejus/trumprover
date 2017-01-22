@@ -31,7 +31,6 @@ class App < Sinatra::Base
       tweet = Nokogiri::HTML(open(tweet_url)).css('div.permalink-tweet')
       if tweet.attribute('data-screen-name').text =~ /^(potus|realdonaldtrump)$/i
         tweet_text = tweet.css('p.TweetTextSize--26px').text
-        puts tweet_text
         tweet_text = tweet_text[0..140]
         erb :results, locals: { tweet_url: tweet_url, tweet_text: tweet_text }, layout: :naked
       else
