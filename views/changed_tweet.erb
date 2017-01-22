@@ -1,5 +1,13 @@
 <h1>Congrats!</h1>
 
-<p class="lead">You have decided to improve <a href="<%= tweet_url %>" target="_blank">one of Donald Trump’s tweets</a>. Below is a cropped screenshot of your improvement.</p>
+<p class="lead">You have decided to improve <a href="<%= tweet_url %>"
+    target="_blank">one of Donald Trump’s tweets</a>. Below is a cropped
+  screenshot of your improvement. It has been already uploaded to imgur for you
+  and is available here: <a href="<%= imgur_url %>" target="_blank"><%=
+  imgur_url %></a>. Share it widely, or keep hacking away at it. And then share
+it widely.</p>
 
-<img src="<%= image_url %>" class="img-responsive img-thumbnail" alt="<%= tweet_text %>">
+
+<center>
+  <img src="<%= imgur_url %>" class="img-responsive img-thumbnail" alt="<%= tweet_text %>">
+</center>

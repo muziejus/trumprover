@@ -5,10 +5,14 @@ require "nokogiri"
 require "open-uri"
 require "dotenv"
 require "selenium-webdriver"
+require "RMagick"
+require "./imgur"
 
 Dotenv.load
 
 class App < Sinatra::Base
+
+  include Magick
 
   use Rack::Session::Cookie,
     secret: ENV['COOKIE']
@@ -45,7 +49,15 @@ class App < Sinatra::Base
     d.execute_script("document.getElementsByClassName('TweetTextSize--26px')[0].innerHTML='#{new_tweet_text}';")
     d.save_screenshot("public/#{new_image}")
     d.quit
-    erb :changed_tweet, locals: { tweet_url: params[:tweet_url], image_url: new_image, tweet_text: new_tweet_text }
+    image = ImageList.new("public/#{new_image}")
+    image.crop!(304, 50, 660, 1024)
+    image.write("public/#{new_image}")
+    imgur_url = upload_image(new_image)
+    unless imgur_url
+      refresh_token
+      imgur_url = upload_image(new_image)
+    end
+    erb :changed_tweet, locals: { imgur_url: imgur_url, tweet_url: params[:tweet_url], image_url: new_image, tweet_text: new_tweet_text }
   end
 
 end
