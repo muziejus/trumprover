@@ -7,7 +7,7 @@ function postUrl() {
 }
 
 $( "#inputUrl" ).change(function() {
-  if(!$( "#inputUrl" ).val().match(/twitter.com.(POTUS|therealdonaldtrump).status./i)) {
+  if(!$( "#inputUrl" ).val().match(/twitter.com.(POTUS|realdonaldtrump).status./i)) {
     $( "#urlForm" ).removeClass("has-success").addClass("has-feedback").addClass("has-error");
     $( "#urlFormLabel" ).text("This doesn’t look like a URL for a tweet by Donald Trump.");
   } else {
