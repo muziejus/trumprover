@@ -58,9 +58,9 @@ class App < Sinatra::Base
       headless.destroy
     end
     image = ImageList.new("public/#{new_image}")
-    image.crop!(240, 50, 660, 1024)
-    image.write("public/#{new_image}")
-    thumb = image.crop(0, 0, 660, 660)
+    main_img = image.crop(240, 50, 660, 1024)
+    main_img.write("public/#{new_image}")
+    thumb = image.crop(240, 50, 660, 660)
     thumb.write("public/#{new_image.gsub(/\.png$/, "_thumb.png")}")
     if ENV['RACK_ENV'] == "production"
       imgur_url = upload_image(new_image)
