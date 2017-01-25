@@ -60,7 +60,7 @@ class App < Sinatra::Base
     image = ImageList.new("public/#{new_image}")
     main_img = image.crop(240, 50, 660, 1024)
     main_img.write("public/#{new_image}")
-    thumb = image.crop(240, 50, 660, 660)
+    thumb = image.crop(240, 50, 660, 330)
     thumb.write("public/#{new_image.gsub(/\.png$/, "_thumb.png")}")
     if ENV['RACK_ENV'] == "production"
       imgur_url = upload_image(new_image)
