@@ -64,6 +64,7 @@ GEM
     dotenv (2.1.2)
     fastercsv (1.5.5)
     ffi (1.9.17)
+    headless (2.3.1)
     httparty (0.14.0)
       multi_xml (>= 0.5.2)
     json (1.8.6)
@@ -103,6 +104,7 @@ DEPENDENCIES
   dm-mysql-adapter
   dm-sqlite-adapter
   dotenv
+  headless
   httparty
   nokogiri
   puma
@@ -115,4 +117,4 @@ RUBY VERSION
    ruby 2.3.1p112
 
 BUNDLED WITH
-   1.14.0
+   1.14.1

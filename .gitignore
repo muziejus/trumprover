@@ -3,4 +3,6 @@
 public/images
 imgur-upload.rb
 imgur_config.yml
+puma.rb
+puma.pid
 

@@ -7,6 +7,7 @@ gem 'sinatra'
 # gem install nokogiri -- --use-system-libraries --with-xml2-lib=/usr/local/opt/libxml2/lib --with-xml2-include=/usr/local/opt/libxml2/include/libxml2
 gem 'nokogiri'
 gem 'httparty'
+gem 'headless'
 gem 'selenium-webdriver'
 gem 'rmagick'
 gem 'dotenv'

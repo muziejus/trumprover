@@ -6,6 +6,7 @@ require "open-uri"
 require "dotenv"
 require "selenium-webdriver"
 require "RMagick"
+require "headless"
 require "./imgur"
 require "./models"
 
@@ -44,13 +45,16 @@ class App < Sinatra::Base
   post "/change-tweet" do
     new_tweet_text = params[:tweet_textarea][0..140].gsub(/^"/, "“").gsub(/ "/, " “").gsub(/"/, "”").gsub(/'/, "’")
     new_image = "images/new_tweet_#{Time.now.to_i.to_s}.png" 
+    headless = Headless.new
+    headless.start
     d = Selenium::WebDriver.for :firefox
     d.navigate.to params[:tweet_url]
     d.execute_script("document.getElementsByClassName('TweetTextSize--26px')[0].innerHTML='#{new_tweet_text}';")
     d.save_screenshot("public/#{new_image}")
     d.quit
+    headless.destroy
     image = ImageList.new("public/#{new_image}")
-    image.crop!(304, 50, 660, 1024)
+    image.crop!(240, 50, 660, 1024)
     image.write("public/#{new_image}")
     imgur_url = upload_image(new_image)
     unless imgur_url
