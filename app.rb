@@ -52,10 +52,14 @@ class App < Sinatra::Base
     image = ImageList.new("public/#{new_image}")
     image.crop!(304, 50, 660, 1024)
     image.write("public/#{new_image}")
-    imgur_url = upload_image(new_image)
-    unless imgur_url
-      refresh_token
+    if ENV['RACK_ENV'] == "production"
       imgur_url = upload_image(new_image)
+      unless imgur_url
+        refresh_token
+        imgur_url = upload_image(new_image)
+      end
+    else
+      imgur_url = "#{new_image}"
     end
     entry = Twimage.new
     entry.attributes = { text: new_tweet_text, original_tweet: params[:tweet_url], imgur_url: imgur_url, created_at: Time.now }
