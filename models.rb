@@ -10,6 +10,7 @@ class Twimage
   property :text, Text
   property :original_tweet, Text
   property :imgur_url, String
+  property :imgur_url_thumb, String
   property :created_at, DateTime
 end
 

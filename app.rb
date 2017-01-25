@@ -60,25 +60,38 @@ class App < Sinatra::Base
     image = ImageList.new("public/#{new_image}")
     image.crop!(240, 50, 660, 1024)
     image.write("public/#{new_image}")
+    thumb = image.crop(0, 0, 660, 660)
+    thumb.write("public/#{new_image.gsub(/\.png$/, "_thumb.png")}")
     if ENV['RACK_ENV'] == "production"
       imgur_url = upload_image(new_image)
+      imgur_url_thumb = upload_image("#{new_image.gsub(/\.png$/, "_thumb.png")}")
       unless imgur_url
         refresh_token
         imgur_url = upload_image(new_image)
       end
+      unless imgur_url_thumb
+        refresh_token
+        imgur_url_thumb = upload_image("#{new_image.gsub(/\.png$/, "_thumb.png")}")
+      end
     else
       imgur_url = "#{new_image}"
+      imgur_url_thumb = "#{new_image.gsub(/\.png$/, "_thumb.png")}"
     end
     entry = Twimage.new
-    entry.attributes = { text: new_tweet_text, original_tweet: params[:tweet_url], imgur_url: imgur_url, created_at: Time.now }
+    entry.attributes = { text: new_tweet_text, original_tweet: params[:tweet_url], imgur_url: imgur_url, imgur_url_thumb: imgur_url_thumb, created_at: Time.now }
     begin
       entry.save
+      redirect "/#{entry.id}"
     rescue DataMapper::SaveFailureError => e
       erb :error, locals: { e: e, validation: entry.errors.values.join(', ') }
     rescue StandardError => e
       erb :error, locals: { e: e }
     end
-    erb :changed_tweet, locals: { imgur_url: imgur_url, tweet_url: params[:tweet_url], image_url: new_image, tweet_text: new_tweet_text }
+  end
+
+  get "/:id" do
+    entry = Twimage.get params[:id]
+    erb :changed_tweet, locals: { imgur_url: entry.imgur_url, tweet_url: entry.original_tweet, image_url: entry.imgur_url, tweet_text: entry.text, imgur_url_thumb: entry.imgur_url_thumb }, layout: :single_tweet_layout
   end
 
 end
