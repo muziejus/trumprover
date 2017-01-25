@@ -45,14 +45,18 @@ class App < Sinatra::Base
   post "/change-tweet" do
     new_tweet_text = params[:tweet_textarea][0..140].gsub(/^"/, "“").gsub(/ "/, " “").gsub(/"/, "”").gsub(/'/, "’")
     new_image = "images/new_tweet_#{Time.now.to_i.to_s}.png" 
-    headless = Headless.new
-    headless.start
+    if ENV['RACK_ENV'] == "production"
+      headless = Headless.new
+      headless.start
+    end
     d = Selenium::WebDriver.for :firefox
     d.navigate.to params[:tweet_url]
     d.execute_script("document.getElementsByClassName('TweetTextSize--26px')[0].innerHTML='#{new_tweet_text}';")
     d.save_screenshot("public/#{new_image}")
     d.quit
-    headless.destroy
+    if ENV['RACK_ENV'] == "production"
+      headless.destroy
+    end
     image = ImageList.new("public/#{new_image}")
     image.crop!(240, 50, 660, 1024)
     image.write("public/#{new_image}")
