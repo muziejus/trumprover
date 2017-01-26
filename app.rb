@@ -85,13 +85,17 @@ class App < Sinatra::Base
     rescue DataMapper::SaveFailureError => e
       erb :error, locals: { e: e, validation: entry.errors.values.join(', ') }
     rescue StandardError => e
-      erb :error, locals: { e: e }
+      erb :error, locals: { e: e, validation: "" }
     end
   end
 
   get "/:id" do
     entry = Twimage.get params[:id]
-    erb :changed_tweet, locals: { imgur_url: entry.imgur_url, tweet_url: entry.original_tweet, image_url: entry.imgur_url, tweet_text: entry.text, imgur_url_thumb: entry.imgur_url_thumb }, layout: :single_tweet_layout
+    unless entry.nil?
+      erb :changed_tweet, locals: { id: entry.id, imgur_url: entry.imgur_url, tweet_url: entry.original_tweet, image_url: entry.imgur_url, tweet_text: entry.text, imgur_url_thumb: entry.imgur_url_thumb }, layout: :single_tweet_layout
+    else
+      erb :error, locals: { e: "No such id found. <a href='/'>Go to start</a>.", validation: "" }
+    end
   end
 
 end
