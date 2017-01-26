@@ -43,7 +43,7 @@ class App < Sinatra::Base
   end
 
   post "/change-tweet" do
-    new_tweet_text = params[:tweet_textarea][0..140].gsub(/^"/, "“").gsub(/ "/, " “").gsub(/"/, "”").gsub(/'/, "’")
+    new_tweet_text = params[:tweet_textarea][0..140].gsub(/^"/, "“").gsub(/ "/, " “").gsub(/"/, "”").gsub(/'/, "’").gsub(/(\r|\n)/, " ")
     new_image = "images/new_tweet_#{Time.now.to_i.to_s}.png" 
     if ENV['RACK_ENV'] == "production"
       headless = Headless.new
