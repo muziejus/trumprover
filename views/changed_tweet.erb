@@ -1,21 +1,25 @@
-<h1>Congrats!</h1>
+<h1>Trumprovement underway</h1>
 
-<p class="lead">You have decided to improve <a href="<%= tweet_url %>"
-    target="_blank">one of Donald Trump’s tweets</a>. Below is a cropped
-  screenshot of your improvement. It has been already uploaded to imgur for you
-  and is available here: <a href="<%= imgur_url %>" target="_blank"><%=
-  imgur_url %></a>. Share it widely, or keep hacking away at it. And then share
-it widely.</p>
+<div class="row">
+  <div class="col-sm-4">
 
-<a class="twitter-share-button"
-  href="https://twitter.com/intent/tweet?text=I%20have%20improved%20a%20Trump%20tweet%20using%20The%20Trumprover&url=http%3A%2F%2Ftrumprover.moacir.com%2F"
-    data-size="large">
-    Tweet out this improved tweet</a>
+    <p class="lead"><a href="<%= tweet_url %>" target="_blank">One of Donald
+        Trump’s tweets</a> has been improved. This screenshot has been already
+      uploaded to imgur for you and is available here: <a href="<%= imgur_url
+        %>" target="_blank"><%= imgur_url %></a>. Share it widely, or keep
+      hacking away at it. And then share it widely.</p>
 
-
-<center>
-  <img src="<%= imgur_url %>" class="img-responsive img-thumbnail" alt="<%= tweet_text %>">
-</center>
+    <a class="twitter-share-button"
+      href="https://twitter.com/intent/tweet?text=I%20have%20improved%20a%20Trump%20tweet%20using%20The%20Trumprover&url=http%3A%2F%2Ftrumprover.moacir.com%2F<%= id %>"
+        data-size="large">
+        Tweet out this improved tweet</a>
+  </div>
+  <div class="col-sm-8">
+    <center>
+      <img src="<%= imgur_url %>" class="img-responsive img-thumbnail" alt="<%= tweet_text %>">
+    </center>
+  </div>
+</div>
 
 <footer>
 
